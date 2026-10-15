@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BACKEND QUEST</title>
+<style>
+:root{--bg:#07142F;--cy:#00D9FF;--pu:#8B5CF6;--tx:#B8C7E0;--card:#0D1F45;--ok:#22E3A0;--bad:#FF6B8A;--ln:rgba(0,217,255,.28)}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{background:radial-gradient(900px 500px at 85% -10%,rgba(139,92,246,.28),transparent),radial-gradient(800px 500px at 0% 100%,rgba(0,217,255,.14),transparent),var(--bg);color:var(--tx);font-family:Poppins,Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55}
+h1,h2,h3{color:#fff;line-height:1.2}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+.top{position:sticky;top:0;z-index:5;display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:12px 20px;background:rgba(7,20,47,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--ln)}
+.logo{color:#fff;font-weight:700;letter-spacing:.5px}.logo b{color:var(--cy)}
+.xpwrap{flex:1;min-width:160px}
+.xpl{display:flex;justify-content:space-between;font-size:.8rem}
+.bar{height:10px;border-radius:9px;background:#13285a;overflow:hidden;margin-top:3px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cy),var(--pu));box-shadow:0 0 12px var(--cy);transition:width .5s}
+.chip{border:1px solid var(--pu);color:#d6c8ff;border-radius:99px;padding:3px 12px;font-size:.8rem}
+.ghost{background:none;border:1px solid var(--ln);color:var(--tx);border-radius:10px;padding:6px 12px;font-size:.8rem}
+.ghost:hover{border-color:var(--cy);color:#fff}
+main{max-width:860px;margin:0 auto;padding:26px 18px 60px}
+.card{background:linear-gradient(160deg,var(--card),#0a1836);border:1px solid var(--ln);border-radius:20px;padding:26px;box-shadow:0 0 30px rgba(0,217,255,.07)}
+.btn{background:linear-gradient(90deg,var(--cy),var(--pu));color:#06112a;font-weight:700;border:0;border-radius:14px;padding:13px 28px;font-size:1rem;box-shadow:0 0 22px rgba(0,217,255,.35);transition:transform .15s,box-shadow .15s}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 32px rgba(139,92,246,.6)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.hero{text-align:center;padding:40px 22px}
+.hero h1{font-size:clamp(2.2rem,8vw,4rem);letter-spacing:2px;text-shadow:0 0 28px rgba(0,217,255,.55)}
+.hero h1 span{color:var(--cy)}
+.sub{font-size:1.1rem;color:#dbe6ff;margin:8px 0 22px}
+.mis{border:1px solid var(--pu);border-radius:14px;padding:14px;margin:0 auto 26px;max-width:560px;text-align:left;background:rgba(139,92,246,.08)}
+.mis h3{font-size:1rem;color:var(--cy)}
+.mis li{margin-left:20px;font-size:.92rem}
+svg.ill{width:150px;margin-bottom:10px;filter:drop-shadow(0 0 12px rgba(0,217,255,.5))}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:20px 0}
+.m{background:var(--card);border:1px solid var(--ln);border-radius:18px;padding:20px;text-align:left;color:var(--tx);transition:.2s;position:relative}
+.m:hover:not(:disabled){border-color:var(--cy);box-shadow:0 0 22px rgba(0,217,255,.3);transform:translateY(-3px)}
+.m:disabled{opacity:.45;cursor:not-allowed}
+.m.done{border-color:var(--ok);box-shadow:0 0 18px rgba(34,227,160,.2)}
+.m.bonus{border-color:var(--pu)}
+.m h3{margin:6px 0 4px;font-size:1.05rem}
+.m .ic{font-size:1.8rem}
+.st{font-size:.8rem;margin-top:8px;color:#dbe6ff}
+.m.done .st{color:var(--ok)}
+.dots{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 18px}
+.dots i{width:22px;height:6px;border-radius:4px;background:#17306b}
+.dots i.a{background:var(--cy)}.dots i.ok{background:var(--ok)}.dots i.no{background:var(--bad)}
+.sec{color:var(--pu);font-weight:600;font-size:.9rem;margin-bottom:4px}
+.q{font-size:1.25rem;margin:4px 0 14px}
+pre{background:#050e22;border:1px solid var(--ln);border-radius:12px;padding:14px;margin-bottom:14px;color:var(--cy);overflow-x:auto;font:0.88rem/1.5 ui-monospace,Menlo,Consolas,monospace}
+.opts{display:grid;gap:10px}
+.o{background:#0a1a3c;border:1px solid var(--ln);color:#e6eeff;border-radius:12px;padding:13px 16px;text-align:left;transition:.15s}
+.o:hover:not(:disabled){border-color:var(--cy);background:#0e2250}
+.o:disabled{cursor:default}
+.o.c{border-color:var(--ok);background:rgba(34,227,160,.14)}
+.o.w{border-color:var(--bad);background:rgba(255,107,138,.14);animation:sh .3s}
+@keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.fb{margin-top:18px;border-radius:14px;padding:16px;border:1px solid;animation:pop .3s}
+@keyframes pop{from{transform:scale(.97);opacity:0}}
+.fb.ok{border-color:var(--ok);background:rgba(34,227,160,.09)}
+.fb.no{border-color:var(--pu);background:rgba(139,92,246,.1)}
+.fb h3{margin-bottom:4px}
+.fb .btn{margin-top:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.step{background:#0a1a3c;border:1px dashed var(--ln);border-radius:10px;padding:9px 12px;color:#e6eeff}
+.chosen .step{border-style:solid;border-color:var(--cy)}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:20px 0}
+.stat{background:#0a1a3c;border:1px solid var(--ln);border-radius:14px;padding:14px;text-align:center}
+.stat b{display:block;font-size:1.6rem;color:#fff}
+.rank{font-size:clamp(1.6rem,6vw,2.4rem);color:var(--cy);text-shadow:0 0 20px rgba(0,217,255,.6);margin:6px 0}
+.bonusline{color:#d6c8ff;border:1px solid var(--pu);border-radius:12px;padding:10px 14px;margin-bottom:12px}
+.modal{position:fixed;inset:0;background:rgba(3,8,22,.8);display:flex;align-items:center;justify-content:center;z-index:9;padding:20px}
+.modal .card{max-width:380px;text-align:center}
+.modal .row{justify-content:center;margin:16px 0 0}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ---------- Content ---------- */
+const mc=(q,o,a,x,xp,ctx)=>({q,o,a,x,xp,ctx});
+const JS1='{\n  "id": 1,\n  "title": "Laravel Basics",\n  "price": 49.99,\n  "tags": ["php", "laravel"]\n}';
+const FIVE=['200 OK','201 Created','403 Forbidden','404 Not Found','500 Server Error'];
+const M=[
+{n:'Knowledge Check',ic:'🧠',d:'10 questions on the big ideas',items:[
+mc('Which part of a web app runs in the user\'s browser?',['The database','The frontend','The PHP server','The Laravel router'],1,'The frontend (HTML, CSS, JavaScript) runs in the browser. The backend runs on a server.',10),
+mc('In the client-server model, what does the client do?',['Sends requests and shows the responses','Stores all data permanently','Runs the database','Compiles PHP code'],0,'The client (usually a browser or app) asks for things; the server answers.',10),
+mc('What is a database used for?',['Designing buttons','Storing and organizing data so it lasts','Styling pages','Drawing images'],1,'Databases keep data (like courses and enrollments) safe even after the server restarts.',10),
+mc('What does an HTTP request typically include?',['Only an HTML page','A method, a URL, headers, and sometimes a body','A database table','A PHP class'],1,'A request says what the client wants: the method (GET, POST...), the URL, headers, and an optional body.',10),
+mc('What does status code 404 mean?',['The server crashed','The resource was not found','The request succeeded','Access is forbidden'],1,'404 means the server could not find what the URL points to.',10),
+mc('What does status code 500 mean?',['Page not found','Login required','Something went wrong on the server','The request succeeded'],2,'5xx codes signal server-side problems. The request may be fine, but the server failed to handle it.',10),
+mc('What is an API?',['A CSS framework','A kind of database','A web browser','A set of rules that lets programs talk to each other'],3,'An API defines how one program can request data or actions from another.',10),
+mc('What is JSON?',['A PHP framework','An image format','A lightweight text format for exchanging data','A web server'],2,'JSON stores data as readable key-value text, which makes it ideal for APIs.',10),
+mc('What is PHP?',['A styling language','A database engine','A web browser','A server-side programming language'],3,'PHP runs on the server and builds responses, talks to databases, and more.',10),
+mc('What is Laravel?',['A PHP framework that speeds up building web apps','A JavaScript animation library','A database system','An operating system'],0,'Laravel gives PHP developers ready-made tools for routing, databases, and more.',10)]},
+{n:'Bug Hunter',ic:'🐞',d:'True/False + a failed enrollment case',items:[
+mc('The frontend is responsible for permanently saving enrollment data in the database.',['True','False'],1,'Saving data is a backend job. The frontend sends the data, and the backend stores it.',10),
+mc('A 404 status code means the requested resource was not found.',['True','False'],0,'Correct. 404 = Not Found.',10),
+mc('JSON is a text format commonly used to send data between frontend and backend.',['True','False'],0,'Yes. Both sides can read and write JSON easily.',10),
+mc('Laravel is a database system.',['True','False'],1,'Laravel is a PHP framework. Databases like MySQL are separate tools it connects to.',10),
+mc('An API response must always be an HTML page.',['True','False'],1,'APIs often return JSON data, not HTML pages.',10),
+mc('Scenario: A student clicks "Enroll". The page says "Something went wrong". The browser shows POST /api/enrollments returned 500. What does the 500 tell you first?',['The student typed a wrong password','The server hit an unexpected error while handling the request','The URL does not exist','The browser blocked the request'],1,'A 500 points to a server-side error, so the investigation starts in the backend.',50),
+mc('Scenario (continued): What is the best next step to investigate?',['Redesign the Enroll button','Reinstall the browser','Check the backend logs for the error details','Delete all courses'],2,'Server logs usually show the exact error and where it happened. Start there.',50)]},
+{n:'Request Detective',ic:'🔍',d:'Order, match, and analyze requests',items:[
+{t:'order',q:'Put the HTTP request-response cycle in the correct order. Tap the steps one by one.',steps:['The user clicks a button or opens a URL','The browser sends an HTTP request to the server','The server processes it (and may query the database)','The server sends back an HTTP response','The browser shows the result'],shuf:[3,0,4,2,1],xp:50,x:'The browser asks, the server works and replies, then the browser displays what came back.'},
+mc('Which status fits: the course list loaded successfully?',FIVE,0,'200 OK means the request worked and data came back.',10),
+mc('Which status fits: a new enrollment was created?',FIVE,1,'201 Created is used when a request successfully creates something new.',10),
+mc('Which status fits: a student opens an instructor-only page and is not allowed in?',FIVE,2,'403 Forbidden means the server understood you, but you do not have permission.',10),
+mc('Which status fits: the URL /api/courses/9999 points to a course that does not exist?',FIVE,3,'404 Not Found: nothing exists at that address.',10),
+mc('Which status fits: the server hit an unexpected error while saving data?',FIVE,4,'500 means the problem is on the server side.',10),
+mc('What is this request trying to do?',['Read a list of enrollments','Create a new enrollment','Delete an enrollment','Load a CSS file'],1,'POST is used to send data to create something new, here an enrollment.',25,'POST /api/enrollments\nContent-Type: application/json\n\n{\n  "student_id": 12,\n  "course_id": 5\n}'),
+mc('What information is sent in the request body?',['A status code and message','The student\'s password','Which student and which course','Only the HTTP method'],2,'The JSON body carries student_id and course_id, so the backend knows who enrolls in what.',25,'POST /api/enrollments\nContent-Type: application/json\n\n{\n  "student_id": 12,\n  "course_id": 5\n}')]},
+{n:'API Architect',ic:'🏗️',d:'Endpoints, JSON, and responsibilities',items:[
+mc('Which endpoint retrieves the list of courses?',['POST /api/courses/delete','GET /api/courses','PUT /api/login','POST /api/enrollments'],1,'GET is for reading data, and /api/courses names the courses resource.',15),
+mc('Which endpoint creates a new enrollment?',['GET /api/courses','DELETE /api/enrollments','POST /api/enrollments','GET /api/enrollments'],2,'POST sends data to create a new record in the enrollments resource.',15),
+mc('Which description fits this JSON?',['An array of numbers','An object of key-value pairs that includes an array','An HTML element','A SQL query'],1,'Curly braces make an object. "tags" holds an array inside it.',30,JS1),
+mc('Who shows the Enroll button and course list to the user?',['Frontend','Backend','Server','Database'],0,'The frontend is the user interface.',10),
+mc('Who applies rules, such as checking a student is not enrolled twice?',['Frontend','Backend','Server','Database'],1,'Backend code holds the application logic and rules.',10),
+mc('Who is the machine that runs the backend code and answers requests?',['Frontend','Backend','Server','Database'],2,'The server is the computer (or service) that receives requests and sends responses.',10),
+mc('Who stores the course and enrollment records?',['Frontend','Backend','Server','Database'],3,'The database keeps data long term.',10)]},
+{n:'Bonus Challenge',ic:'⭐',d:'Up to 25 extra XP',bonus:1,items:[
+mc('The frontend expects each course to have a "price", but the backend returns "cost". Prices show as "undefined". What is the best fix?',['Delete the course','Agree on one field name and update the frontend or backend so they match','Ignore it, the browser will guess','Change the database password'],1,'Frontend and backend must agree on the API contract, including field names.',25,'// Frontend expects:\n{ "title": "Laravel Basics", "price": 49.99 }\n\n// Backend returns:\n{ "title": "Laravel Basics", "cost": 49.99 }')]}
+];
+const BASE=500,BONUS=25,K='backendquest_v1';
+/* ---------- State ---------- */
+let S=load();
+function load(){try{const d=JSON.parse(localStorage.getItem(K));if(d&&d.ans)return{scr:d.scr||'start',m:d.m||0,i:0,ans:d.ans,sel:[],fb:null,modal:0}}catch(e){}return fresh()}
+function fresh(){return{scr:'start',m:0,i:0,ans:{},sel:[],fb:null,modal:0}}
+function save(){try{localStorage.setItem(K,JSON.stringify({scr:S.scr,m:S.m,ans:S.ans}))}catch(e){}}
+const key=(m,i)=>m+'-'+i;
+const nextIdx=m=>M[m].items.findIndex((_,i)=>!S.ans[key(m,i)]);
+const done=m=>nextIdx(m)<0;
+const unlocked=m=>m==0||done(m-1);
+const part=m=>M[m].items.filter((_,i)=>S.ans[key(m,i)]).length;
+function sum(from,to,f){let t=0;for(let m=from;m<to;m++)M[m].items.forEach((_,i)=>{const a=S.ans[key(m,i)];if(a)t+=f(a)});return t}
+const baseXP=()=>sum(0,4,a=>a.xp),bonusXP=()=>sum(4,5,a=>a.xp);
+const answered=()=>sum(0,4,()=>1),correct=()=>sum(0,4,a=>a.ok?1:0);
+const allBase=()=>[0,1,2,3].every(done);
+function rank(x){return x>=450?'Backend Champion':x>=350?'API Architect':x>=200?'Request Detective':'Junior Explorer'}
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+/* ---------- Actions ---------- */
+function go(scr,m){S.scr=scr;if(m!==undefined){S.m=m;S.i=Math.max(0,nextIdx(m))}S.fb=null;S.sel=[];save();render();window.scrollTo(0,0)}
+function pick(j){if(S.fb)return;const it=M[S.m].items[S.i];record(j===it.a,j)}
+function record(ok,j){const it=M[S.m].items[S.i];if(S.ans[key(S.m,S.i)])return;S.ans[key(S.m,S.i)]={ok,xp:ok?it.xp:0};S.fb={ok,j};save();render()}
+function nextQ(){S.fb=null;S.sel=[];if(done(S.m)){S.scr=S.m==4?'results':'map'}else S.i=nextIdx(S.m);save();render();window.scrollTo(0,0)}
+function addStep(k){if(S.fb||S.sel.includes(k))return;S.sel.push(k);render()}
+function undo(){if(!S.fb){S.sel.pop();render()}}
+function checkOrder(){const it=M[S.m].items[S.i];if(S.fb||S.sel.length<it.steps.length)return;record(S.sel.every((k,n)=>k===n))}
+function restart(){S=fresh();S.scr='map';try{localStorage.removeItem(K)}catch(e){}render();window.scrollTo(0,0)}
+function askReset(v){S.modal=v;render()}
+function doReset(){S=fresh();try{localStorage.removeItem(K)}catch(e){}render()}
+/* ---------- Views ---------- */
+const ILL='<svg class="ill" viewBox="0 0 160 110" fill="none" stroke="#00D9FF" stroke-width="2.5" stroke-linecap="round"><rect x="8" y="8" width="144" height="70" rx="10" fill="#0D1F45"/><path d="M52 34 36 43l16 9M108 34l16 9-16 9" /><path d="M88 28 72 58" stroke="#8B5CF6"/><path d="M60 92h40M80 78v14"/></svg>';
+function topbar(){const x=baseXP(),b=bonusXP();return`<div class="top"><div class="logo">BACKEND <b>QUEST</b></div><div class="xpwrap"><div class="xpl"><span>XP ${x} / ${BASE}</span><span>${rank(x)}</span></div><div class="bar"><i style="width:${x/BASE*100}%"></i></div></div>${b?`<span class="chip">+${b} bonus</span>`:''}<button class="ghost" onclick="askReset(1)">Reset progress</button></div>`}
+function vStart(){const has=Object.keys(S.ans).length;return`<div class="card hero">${ILL}<h1>BACKEND <span>QUEST</span></h1><p class="sub">Your Journey to Becoming a Backend Developer</p><div class="mis"><h3>Mission: The Broken Learning Platform</h3><ul><li>Students cannot enroll in courses.</li><li>Some pages return errors.</li><li>Enrollment data is not saved correctly.</li></ul><p style="margin-top:8px;font-size:.9rem">You are the Junior Backend Developer. Complete four missions to investigate.</p></div><button class="btn" onclick="go('map')">${has?'CONTINUE THE QUEST':'START THE QUEST'}</button></div>`}
+function vMap(){const cards=M.map((mi,m)=>{if(mi.bonus&&!allBase())return'';const un=unlocked(m),d=done(m),p=part(m),n=mi.items.length;const st=d?'Completed ✓':!un?'🔒 Locked: finish the previous mission':p?`In progress: ${p}/${n}`:'Ready to start';const xp=sum(m,m+1,a=>a.xp),max=mi.items.reduce((t,i)=>t+i.xp,0);return`<button class="m ${d?'done':''} ${mi.bonus?'bonus':''}" ${un?'':'disabled'} onclick="go('q',${m})"><div class="ic">${mi.ic}</div><h3>${mi.bonus?'':'Mission '+(m+1)+': '}${mi.n}</h3><div>${mi.d}</div><div class="st">${st}</div><div class="st">${xp} / ${max} XP</div></button>`}).join('');
+return`<h2>Mission Map</h2><p>Complete the missions in order to repair the platform.</p><div class="map">${cards}</div>${allBase()?`<div class="card"><h3>All four missions complete!</h3><p style="margin:6px 0 14px">Try the bonus challenge for up to ${BONUS} extra XP, or see your results now.</p><button class="btn" onclick="go('results')">VIEW FINAL RESULTS</button></div>`:''}`}
+function vQ(){const mi=M[S.m],it=mi.items[S.i],n=mi.items.length;const dots=mi.items.map((_,i)=>{const a=S.ans[key(S.m,i)];return`<i class="${a?(a.ok?'ok':'no'):i==S.i?'a':''}"></i>`}).join('');
+let body='';
+if(it.t==='order'){const pool=it.shuf.map(k=>`<button class="o step" ${S.sel.includes(k)||S.fb?'disabled':''} onclick="addStep(${k})">${esc(it.steps[k])}</button>`).join('');
+body=`<div class="sec">Available steps</div><div class="row">${pool}</div><div class="sec">Your order</div><div class="chosen">${S.sel.map((k,n)=>`<div class="step" style="margin-bottom:6px">${n+1}. ${esc(it.steps[k])}</div>`).join('')||'<p style="font-size:.9rem">Tap steps above to build the sequence.</p>'}</div>${S.fb?'':`<div class="row" style="margin-top:12px"><button class="ghost" onclick="undo()" ${S.sel.length?'':'disabled'}>Undo last</button><button class="btn" onclick="checkOrder()" ${S.sel.length<it.steps.length?'disabled':''}>Check order</button></div>`}`}
+else body=`<div class="opts">${it.o.map((t,j)=>{let c='';if(S.fb){if(j===it.a)c='c';else if(j===S.fb.j)c='w'}return`<button class="o ${c}" ${S.fb?'disabled':''} onclick="pick(${j})">${esc(t)}</button>`}).join('')}</div>`;
+let fb='';if(S.fb){const a=S.ans[key(S.m,S.i)];const last=done(S.m);const right=it.t==='order'?'Correct order: '+it.steps.map((s,i)=>`${i+1}) ${esc(s)}`).join(' ➜ ')+'. ':'';
+fb=`<div class="fb ${S.fb.ok?'ok':'no'}"><h3>${S.fb.ok?'Nice work! +'+a.xp+' XP':'Good try, you are learning!'}</h3><p>${S.fb.ok?'':right}${esc(it.x)}</p><button class="btn" onclick="nextQ()">${last?(S.m==4?'SEE RESULTS':'COMPLETE MISSION'):'NEXT QUESTION'}</button></div>`}
+return`<div class="card"><div class="sec">${mi.ic} ${mi.bonus?'':'Mission '+(S.m+1)+': '}${mi.n} · Question ${S.i+1} of ${n} · worth ${it.xp} XP</div><div class="dots">${dots}</div><div class="q">${esc(it.q)}</div>${it.ctx?`<pre>${esc(it.ctx)}</pre>`:''}${body}${fb}</div><p style="margin-top:12px"><button class="ghost" onclick="go('map')">← Mission map</button></p>`}
+function vResults(){const x=baseXP(),b=bonusXP(),ac=answered()?Math.round(correct()/answered()*100):0,cm=[0,1,2,3].filter(done).length;const bd=M.slice(0,4).map((mi,m)=>`<li>${mi.n}: ${sum(m,m+1,a=>a.xp)} / ${mi.items.reduce((t,i)=>t+i.xp,0)} XP</li>`).join('');
+return`<div class="card hero">${ILL}<h2>${allBase()?'Platform repaired!':'Quest in progress'}</h2><div class="rank">${rank(x)}</div><p>Rank is based on base XP only.</p><div class="res"><div class="stat"><b>${x}/${BASE}</b>Base XP</div><div class="stat"><b>${ac}%</b>Accuracy</div><div class="stat"><b>${cm}/4</b>Missions completed</div></div><div class="bonusline">Bonus XP: ${b} / ${BONUS} ${done(4)?'':'(not attempted)'}</div><ul style="text-align:left;max-width:320px;margin:0 auto 20px;font-size:.92rem">${bd}</ul><div class="row" style="justify-content:center"><button class="btn" onclick="restart()">PLAY AGAIN</button><button class="ghost" onclick="go('map')">Mission map</button></div></div>`}
+function render(){let h='';if(S.scr==='start')h=vStart();else{h=topbar()+'<main>'+(S.scr==='map'?vMap():S.scr==='q'?vQ():vResults())+'</main>'}
+if(S.scr==='start')h='<main>'+h+'</main>';
+if(S.modal)h+=`<div class="modal"><div class="card"><h3>Reset all progress?</h3><p>This clears your saved XP and missions. It cannot be undone.</p><div class="row"><button class="btn" onclick="doReset()">Yes, reset</button><button class="ghost" onclick="askReset(0)">Cancel</button></div></div></div>`;
+document.getElementById('app').innerHTML=h}
+if(S.scr==='q'){S.i=Math.max(0,nextIdx(S.m));if(done(S.m))S.scr='map'}
+render();
+</script>
+</body>
+</html>
